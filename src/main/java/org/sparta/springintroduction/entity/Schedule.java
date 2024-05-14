@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
-import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
