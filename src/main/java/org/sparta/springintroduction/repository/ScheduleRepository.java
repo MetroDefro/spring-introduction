@@ -1,7 +1,7 @@
 package org.sparta.springintroduction.repository;
 
-import org.springframework.stereotype.Repository;
+import org.sparta.springintroduction.entity.Schedule;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class ScheduleRepository {
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 }
