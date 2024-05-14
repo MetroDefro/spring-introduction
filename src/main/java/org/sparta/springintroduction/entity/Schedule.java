@@ -22,7 +22,7 @@ public class Schedule {
     @Column(name = "title", nullable = false, length = 20)
     private String title;
 
-    @Column(name = "contents", nullable = false, length = 255)
+    @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
     @Column(name = "charge", nullable = false, length = 10)
@@ -37,6 +37,9 @@ public class Schedule {
     private LocalDateTime createdAt;
 
     public Schedule(ScheduleRequestDto requestDto) {
-
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.charge = requestDto.getCharge();
+        this.password = requestDto.getPassword();
     }
 }
