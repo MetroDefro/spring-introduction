@@ -18,8 +18,8 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedule")
-    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.createSchedule(scheduleRequestDto);
+    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+        return scheduleService.createSchedule(requestDto);
     }
 
     @GetMapping("/schedule")
@@ -33,8 +33,8 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedule")
-    public ScheduleResponseDto updateSchedule(@RequestParam Long id, @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.updateSchedule(id, scheduleRequestDto);
+    public ScheduleResponseDto updateSchedule(@RequestParam Long id, @RequestBody ScheduleRequestDto requestDto) {
+        return scheduleService.updateSchedule(id, requestDto);
     }
 
     @DeleteMapping("/schedule")

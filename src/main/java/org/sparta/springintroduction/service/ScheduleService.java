@@ -12,14 +12,14 @@ import java.util.List;
 @Service
 public class ScheduleService {
 
-    private ScheduleRepository scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto) {
-        Schedule schedule = new Schedule(scheduleRequestDto);
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+        Schedule schedule = new Schedule(requestDto);
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new ScheduleResponseDto(savedSchedule);
     }
@@ -34,10 +34,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findScheduleById(id);
-        if(checkPassword(schedule, scheduleRequestDto)) {
-            return new ScheduleResponseDto(schedule.update(scheduleRequestDto));
+        if(checkPassword(schedule, requestDto)) {
+            return new ScheduleResponseDto(schedule.update(requestDto));
         } else {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
@@ -49,8 +49,8 @@ public class ScheduleService {
         return id;
     }
 
-    private boolean checkPassword(Schedule schedule, ScheduleRequestDto scheduleRequestDto) {
-        return schedule.getPassword().equals(scheduleRequestDto.getPassword());
+    private boolean checkPassword(Schedule schedule, ScheduleRequestDto requestDto) {
+        return schedule.getPassword().equals(requestDto.getPassword());
     }
 
     public List<ScheduleResponseDto> getSchedules() {
