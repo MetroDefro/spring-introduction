@@ -31,17 +31,21 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findScheduleById(id);
-        if(checkPassword(schedule, requestDto)) {
+        if(checkPassword(schedule, requestDto.getPassword())) {
             return new ScheduleResponseDto(schedule.update(requestDto));
         } else {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }
 
-    public Long deleteSchedule(Long id) {
+    public Long deleteSchedule(Long id, String password) {
         Schedule schedule = findScheduleById(id);
-        scheduleRepository.delete(schedule);
-        return id;
+        if(checkPassword(schedule, password)) {
+            scheduleRepository.delete(schedule);
+            return id;
+        } else {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
     }
 
     private Schedule findScheduleById(Long id) {
@@ -49,8 +53,8 @@ public class ScheduleService {
                 new IllegalArgumentException("해당 일정을 찾을 수 없습니다."));
     }
 
-    private boolean checkPassword(Schedule schedule, ScheduleRequestDto requestDto) {
-        return schedule.getPassword().equals(requestDto.getPassword());
+    private boolean checkPassword(Schedule schedule, String password) {
+        return schedule.getPassword().equals(password);
     }
 
     public List<ScheduleResponseDto> getSchedules() {

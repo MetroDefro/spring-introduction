@@ -26,7 +26,7 @@ public class Schedule {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
-    @Column(name = "charge", nullable = false, length = 10)
+    @Column(name = "charge", nullable = false)
     private String charge;
 
     @Column(name = "password", nullable = false, length = 20)
