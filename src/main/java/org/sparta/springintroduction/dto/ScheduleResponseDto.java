@@ -6,14 +6,14 @@ import org.sparta.springintroduction.entity.Schedule;
 import java.time.LocalDateTime;
 
 @Getter
-public class ScheduleResponeDto {
+public class ScheduleResponseDto {
     private Long id;
     private String title;
     private String contents;
     private String charge;
     private LocalDateTime createdAt;
 
-    public ScheduleResponeDto(Schedule schedule) {
+    public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.contents = schedule.getContents();
