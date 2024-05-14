@@ -31,4 +31,9 @@ public class ScheduleController {
     public List<ScheduleResponseDto> getSchedules() {
         return scheduleService.getSchedules();
     }
+
+    @PutMapping("/schedule")
+    public ScheduleResponseDto updateSchedule(@RequestParam Long id, @RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return scheduleService.updateSchedule(id, scheduleRequestDto);
+    }
 }

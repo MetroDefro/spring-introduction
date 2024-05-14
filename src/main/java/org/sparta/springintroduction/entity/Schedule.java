@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
+import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -41,5 +42,12 @@ public class Schedule {
         this.contents = requestDto.getContents();
         this.charge = requestDto.getCharge();
         this.password = requestDto.getPassword();
+    }
+
+    public Schedule update(ScheduleRequestDto scheduleRequestDto) {
+        this.title = scheduleRequestDto.getTitle();
+        this.contents = scheduleRequestDto.getContents();
+        this.charge = scheduleRequestDto.getCharge();
+        return this;
     }
 }

@@ -5,6 +5,7 @@ import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,11 +33,23 @@ public class ScheduleService {
                 new IllegalArgumentException("해당 일정을 찾을 수 없습니다."));
     }
 
-    private boolean checkPassword(String password) {
-        return true;
+    @Transactional
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
+        Schedule schedule = findScheduleById(id);
+        if(checkPassword(schedule, scheduleRequestDto)) {
+            return new ScheduleResponseDto(schedule.update(scheduleRequestDto));
+        } else {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    private boolean checkPassword(Schedule schedule, ScheduleRequestDto scheduleRequestDto) {
+        return schedule.getPassword().equals(scheduleRequestDto.getPassword());
     }
 
     public List<ScheduleResponseDto> getSchedules() {
         return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
     }
+
+
 }
