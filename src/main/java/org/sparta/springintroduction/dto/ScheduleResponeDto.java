@@ -11,7 +11,6 @@ public class ScheduleResponeDto {
     private String title;
     private String contents;
     private String charge;
-    private String password;
     private LocalDateTime createdAt;
 
     public ScheduleResponeDto(Schedule schedule) {
@@ -19,7 +18,6 @@ public class ScheduleResponeDto {
         this.title = schedule.getTitle();
         this.contents = schedule.getContents();
         this.charge = schedule.getCharge();
-        this.password = schedule.getPassword();
         this.createdAt = schedule.getCreatedAt();
     }
 }
