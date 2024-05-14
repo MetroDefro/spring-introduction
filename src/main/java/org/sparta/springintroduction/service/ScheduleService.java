@@ -21,6 +21,15 @@ public class ScheduleService {
         return new ScheduleResponseDto(savedSchedule);
     }
 
+    public ScheduleResponseDto getSchedule(Long id) {
+        return new ScheduleResponseDto(findScheduleById(id));
+    }
+
+    private Schedule findScheduleById(Long id) {
+        return scheduleRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 일정을 찾을 수 없습니다."));
+    }
+
     private boolean checkPassword(String password) {
         return true;
     }
