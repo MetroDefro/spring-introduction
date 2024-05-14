@@ -5,6 +5,8 @@ import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sprig-introduction")
 public class ScheduleController {
@@ -23,5 +25,10 @@ public class ScheduleController {
     @GetMapping("/schedule")
     public ScheduleResponseDto getSchedule(@RequestParam Long id) {
         return scheduleService.getSchedule(id);
+    }
+
+    @GetMapping("/schedules")
+    public List<ScheduleResponseDto> getSchedules() {
+        return scheduleService.getSchedules();
     }
 }

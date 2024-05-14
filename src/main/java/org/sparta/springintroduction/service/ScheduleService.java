@@ -6,6 +6,8 @@ import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ScheduleService {
 
@@ -32,5 +34,9 @@ public class ScheduleService {
 
     private boolean checkPassword(String password) {
         return true;
+    }
+
+    public List<ScheduleResponseDto> getSchedules() {
+        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
     }
 }
