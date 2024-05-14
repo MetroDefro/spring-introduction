@@ -1,6 +1,8 @@
 package org.sparta.springintroduction.controller;
 
 import org.sparta.springintroduction.service.FileService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,5 +27,10 @@ public class FileController {
         fileService.fileUpload(file);
 
         return "upload";
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

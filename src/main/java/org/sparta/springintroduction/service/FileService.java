@@ -26,13 +26,16 @@ public class FileService {
                         uploadDir +
                                 File.separator + "Downloads" + File.separator +
                                 StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())));
-                System.out.println(path);
                 try {
                     file.transferTo(new File(path.toUri()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            } else {
+                throw new IllegalArgumentException("이미지 파일이 아닙니다.");
             }
+        } else {
+            throw new IllegalArgumentException("파일이 없습니다.");
         }
     }
 }
