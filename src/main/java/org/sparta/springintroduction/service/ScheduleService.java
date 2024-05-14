@@ -28,11 +28,6 @@ public class ScheduleService {
         return new ScheduleResponseDto(findScheduleById(id));
     }
 
-    private Schedule findScheduleById(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 일정을 찾을 수 없습니다."));
-    }
-
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findScheduleById(id);
@@ -47,6 +42,11 @@ public class ScheduleService {
         Schedule schedule = findScheduleById(id);
         scheduleRepository.delete(schedule);
         return id;
+    }
+
+    private Schedule findScheduleById(Long id) {
+        return scheduleRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 일정을 찾을 수 없습니다."));
     }
 
     private boolean checkPassword(Schedule schedule, ScheduleRequestDto requestDto) {

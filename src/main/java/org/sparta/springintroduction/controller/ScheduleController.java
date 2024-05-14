@@ -3,6 +3,8 @@ package org.sparta.springintroduction.controller;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.service.ScheduleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,5 +42,10 @@ public class ScheduleController {
     @DeleteMapping("/schedule")
     public Long deleteSchedule(@RequestParam Long id) {
         return scheduleService.deleteSchedule(id);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
