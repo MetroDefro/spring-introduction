@@ -43,6 +43,12 @@ public class ScheduleService {
         }
     }
 
+    public Long deleteSchedule(Long id) {
+        Schedule schedule = findScheduleById(id);
+        scheduleRepository.delete(schedule);
+        return id;
+    }
+
     private boolean checkPassword(Schedule schedule, ScheduleRequestDto scheduleRequestDto) {
         return schedule.getPassword().equals(scheduleRequestDto.getPassword());
     }
@@ -50,6 +56,4 @@ public class ScheduleService {
     public List<ScheduleResponseDto> getSchedules() {
         return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
     }
-
-
 }
