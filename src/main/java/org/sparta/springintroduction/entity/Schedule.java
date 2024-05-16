@@ -1,6 +1,7 @@
 package org.sparta.springintroduction.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "schedule")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
+@AllArgsConstructor
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

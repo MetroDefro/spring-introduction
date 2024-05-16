@@ -1,11 +1,13 @@
 package org.sparta.springintroduction.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.sparta.springintroduction.entity.Schedule;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class ScheduleResponseDto {
     private Long id;
     private String title;

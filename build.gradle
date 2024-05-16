@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
+    id 'com.adarshr.test-logger' version '4.0.0'
 }
 
 group = 'org.sparta'
@@ -32,6 +34,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // [필수] mockito 의존성 추가
+    testImplementation 'org.mockito:mockito-core:5.8.0'
+
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -40,6 +45,60 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+allprojects {
+    apply {
+        plugin('com.adarshr.test-logger')
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
+}
+
+// jacoco report 설정
+jacocoTestReport {
+    reports {
+        // html로 report 생성하기
+        // 빌드경로/jacoco/report.html 폴더 내부로 경로 설정
+        html.destination file("$buildDir/jacoco/report.html")
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+// jacoco 커버리지 검증 설정
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true // 커버리지 적용 여부
+            element = 'CLASS' // 커버리지 적용 단위
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+// jacoco report 설정
+jacocoTestReport {
+    // 커버리지 보고서 제외 범위 설정
+    getClassDirectories().setFrom(
+            files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        '**/entity',
+                        '**/dto',
+                        '**/*Config'
+                ])
+            })
+    )
 }

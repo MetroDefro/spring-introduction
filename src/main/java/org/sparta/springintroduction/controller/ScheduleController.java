@@ -74,12 +74,12 @@ public class ScheduleController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleException(IllegalArgumentException e) {
+    private ResponseEntity<String> handleException(IllegalArgumentException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
+    private ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(Objects.requireNonNull(e.getFieldError()).getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
 }

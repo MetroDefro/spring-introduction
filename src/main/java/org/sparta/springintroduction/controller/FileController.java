@@ -30,7 +30,7 @@ public class FileController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleException(IllegalArgumentException e) {
+    private ResponseEntity<String> handleException(IllegalArgumentException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

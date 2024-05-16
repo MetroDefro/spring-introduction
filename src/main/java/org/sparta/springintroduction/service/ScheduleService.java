@@ -28,6 +28,10 @@ public class ScheduleService {
         return new ScheduleResponseDto(findScheduleById(id));
     }
 
+    public List<ScheduleResponseDto> getSchedules() {
+        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
+    }
+
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findScheduleById(id);
@@ -55,9 +59,5 @@ public class ScheduleService {
 
     private boolean checkPassword(Schedule schedule, String password) {
         return schedule.getPassword().equals(password);
-    }
-
-    public List<ScheduleResponseDto> getSchedules() {
-        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
     }
 }
