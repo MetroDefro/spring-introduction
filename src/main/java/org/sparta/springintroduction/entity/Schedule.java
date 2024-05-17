@@ -2,6 +2,7 @@ package org.sparta.springintroduction.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Entity
 @Table(name = "schedule")
@@ -38,17 +40,10 @@ public class Schedule {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    public Schedule(ScheduleRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.contents = requestDto.getContents();
-        this.charge = requestDto.getCharge();
-        this.password = requestDto.getPassword();
-    }
-
-    public Schedule update(ScheduleRequestDto scheduleRequestDto) {
-        this.title = scheduleRequestDto.getTitle();
-        this.contents = scheduleRequestDto.getContents();
-        this.charge = scheduleRequestDto.getCharge();
+    public Schedule update(String title, String contents, String charge) {
+        this.title = title;
+        this.contents = contents;
+        this.charge = charge;
         return this;
     }
 }

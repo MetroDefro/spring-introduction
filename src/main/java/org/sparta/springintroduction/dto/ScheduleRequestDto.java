@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.sparta.springintroduction.entity.Schedule;
 
 @Getter
 @AllArgsConstructor
@@ -25,4 +26,13 @@ public class ScheduleRequestDto {
     @NotNull
     @Size(min = 1, max = 20)
     private String password;
+
+    public Schedule toEntity() {
+        return Schedule.builder()
+                .title(title)
+                .contents(contents)
+                .charge(charge)
+                .password(password)
+                .build();
+    }
 }

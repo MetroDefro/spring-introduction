@@ -36,20 +36,20 @@ public class ScheduleController {
             @Parameter(name = "charge", description = "담당자(email)", example = "damdang@email.com"),
             @Parameter(name = "password", description = "비밀번호(1~20자)", example = "1234"),
     })
-    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
-        return scheduleService.createSchedule(requestDto);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
+        return ResponseEntity.ok(scheduleService.createSchedule(requestDto));
     }
 
     @GetMapping("/schedule")
     @Operation(summary = "선택한 일정 조회")
-    public ScheduleResponseDto getSchedule(@RequestParam Long id) {
-        return scheduleService.getSchedule(id);
+    public ResponseEntity<ScheduleResponseDto> getSchedule(@RequestParam Long id) {
+        return ResponseEntity.ok(scheduleService.getSchedule(id));
     }
 
     @GetMapping("/schedules")
     @Operation(summary = "일정 목록 조회")
-    public List<ScheduleResponseDto> getSchedules() {
-        return scheduleService.getSchedules();
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedules() {
+        return ResponseEntity.ok(scheduleService.getSchedules());
     }
 
     @PutMapping("/schedule")
@@ -60,8 +60,8 @@ public class ScheduleController {
             @Parameter(name = "charge", description = "담당자(email)", example = "damdang@email.com"),
             @Parameter(name = "password", description = "비밀번호(1~20자)", example = "1234"),
     })
-    public ScheduleResponseDto updateSchedule(@RequestParam Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
-        return scheduleService.updateSchedule(id, requestDto);
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@RequestParam Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
+        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
     }
 
     @DeleteMapping("/schedule")
@@ -69,8 +69,8 @@ public class ScheduleController {
     @Parameters({
             @Parameter(name = "password", description = "비밀번호(1~20자)", example = "1234"),
     })
-    public Long deleteSchedule(@RequestParam Long id, @RequestBody Map<String, String> password) {
-        return scheduleService.deleteSchedule(id, password.get("password"));
+    public ResponseEntity<Long> deleteSchedule(@RequestParam Long id, @RequestBody Map<String, String> password) {
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id, password.get("password")));
     }
 
     @ExceptionHandler

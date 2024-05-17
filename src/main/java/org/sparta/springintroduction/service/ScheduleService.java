@@ -4,6 +4,7 @@ import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.repository.ScheduleRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ public class ScheduleService {
     }
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
-        Schedule schedule = new Schedule(requestDto);
+        Schedule schedule = requestDto.toEntity();
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new ScheduleResponseDto(savedSchedule);
     }
@@ -29,14 +30,16 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponseDto> getSchedules() {
-        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
+        return scheduleRepository.findAll(Sort.by("createdAt").descending())
+                .stream().map(ScheduleResponseDto::new).toList();
     }
 
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findScheduleById(id);
         if(checkPassword(schedule, requestDto.getPassword())) {
-            return new ScheduleResponseDto(schedule.update(requestDto));
+            return new ScheduleResponseDto(schedule
+                    .update(requestDto.getTitle(), requestDto.getContents(), requestDto.getPassword()));
         } else {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
