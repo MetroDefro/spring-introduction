@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -45,6 +46,15 @@ public class CommentController {
     })
     public ResponseEntity<CommentResponseDto> updateComment(@RequestParam Long scedule, @RequestParam Long id, @Valid @RequestBody CommentRequestDto requestDto) {
         return ResponseEntity.ok(commentService.updateComment(scedule, id, requestDto));
+    }
+
+    @DeleteMapping("/comment")
+    @Operation(summary = "댓글 삭제")
+    @Parameters({
+            @Parameter(name = "userId", description = "사용자 ID", example = "user1234")
+    })
+    public ResponseEntity<String> deleteSchedule(@RequestParam Long scedule, @RequestParam Long id, @RequestBody Map<String, String> userId) {
+        return ResponseEntity.ok(commentService.deleteComment(scedule, id, userId.get("userId")));
     }
 
     @ExceptionHandler

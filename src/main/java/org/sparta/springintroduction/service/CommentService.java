@@ -2,6 +2,7 @@ package org.sparta.springintroduction.service;
 
 import org.sparta.springintroduction.dto.CommentRequestDto;
 import org.sparta.springintroduction.dto.CommentResponseDto;
+import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.entity.Comment;
 import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.repository.CommentRepository;
@@ -36,6 +37,17 @@ public class CommentService {
             throw new SecurityException("작성자가 아니라 댓글 수정 권한이 없습니다.");
         } else {
             return new CommentResponseDto(comment.update(requestDto.getContents()));
+        }
+    }
+
+    public String deleteComment(Long sceduleId, Long id, String userId) {
+        findScheduleById(sceduleId);
+        Comment comment = findCommentById(id);
+        if(!Objects.equals(userId, comment.getUserId())) {
+            throw new SecurityException("작성자가 아니라 댓글 수정 권한이 없습니다.");
+        } else {
+            commentRepository.delete(comment);
+            return "댓글 삭제를 성공하였습니다.";
         }
     }
 
