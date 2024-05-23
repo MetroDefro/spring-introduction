@@ -36,4 +36,9 @@ public class Comment {
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+
+    public Comment update(String contents) {
+        this.contents = contents;
+        return this;
+    }
 }
