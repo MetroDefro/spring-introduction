@@ -8,41 +8,36 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
 @Entity
-@Table(name = "schedule")
+@Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Schedule {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 20)
-    private String title;
+    @Column(nullable = false, length = 20)
+    private String nickname;
 
-    @Column(name = "contents", nullable = false, length = 500)
-    private String contents;
+    @Column(nullable = false, unique = true, length = 20)
+    private String username;
 
-    @Column(name = "charge", nullable = false)
-    private String charge;
-
-    @Column(name = "password", nullable = false, length = 20)
+    @Column(nullable = false, length = 20)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
     @CreatedDate
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
-
-    public Schedule update(String title, String contents, String charge) {
-        this.title = title;
-        this.contents = contents;
-        this.charge = charge;
-        return this;
-    }
 }

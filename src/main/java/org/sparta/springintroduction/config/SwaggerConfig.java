@@ -1,4 +1,4 @@
-package org.sparta.springintroduction;
+package org.sparta.springintroduction.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
