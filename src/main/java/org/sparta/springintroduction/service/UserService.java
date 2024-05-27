@@ -14,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     // ADMIN_TOKEN
@@ -21,6 +22,7 @@ public class UserService {
 
     public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -39,7 +41,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = requestDto.toEntity(role);
+        User user = requestDto.toEntity(password, role);
 
         userRepository.save(user);
     }

@@ -27,10 +27,10 @@ public class SignupRequestDto {
 
     private String adminToken = "";
 
-    public User toEntity(UserRoleEnum role) {
+    public User toEntity(String password, UserRoleEnum role) {
         return User.builder()
-                .nickname(nickname)
-                .username(username)
+                .nickname(this.nickname)
+                .username(this.username)
                 .password(password)
                 .role(role)
                 .build();

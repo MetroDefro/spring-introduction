@@ -65,15 +65,16 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/**").permitAll() // 임시로 전부 접근 허가
-                        // .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        // .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
+                        .requestMatchers("/sprig-introduction/user/**").permitAll() // '/sprig-introduction/user/'로 시작하는 요청 모두 접근 허가
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
         http.formLogin((formLogin) ->
                 formLogin
-                        .loginPage("/api/user/login-page").permitAll()
+                        .loginPage("/sprig-introduction/user/login")
+                        .failureUrl("/sprig-introduction/user/login?error=true") // 로그인 실패 후 이동 페이지
+                        .permitAll()
         );
 
         // SecurityFilterChain에 필터를 넣고 순서 지정 한다.
