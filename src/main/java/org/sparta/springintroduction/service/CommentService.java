@@ -22,16 +22,15 @@ public class CommentService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public CommentResponseDto createComment(Long sceduleId, CommentRequestDto requestDto, User user) {
+    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, User user) {
         // dto로부터 새 엔티티를 생성할 때 schedule 주입한다.
-        Schedule schedule = findScheduleById(sceduleId);
-        Comment comment = requestDto.toEntity(findScheduleById(sceduleId), user.getUsername());
+        Comment comment = requestDto.toEntity(findScheduleById(scheduleId), user.getUsername());
         Comment savedComment = commentRepository.save(comment);
         return new CommentResponseDto(savedComment);
     }
 
-    public CommentResponseDto updateComment(Long sceduleId, Long id, CommentRequestDto requestDto, User user) {
-        findScheduleById(sceduleId);
+    public CommentResponseDto updateComment(Long scheduleId, Long id, CommentRequestDto requestDto, User user) {
+        findScheduleById(scheduleId);
         Comment comment = findCommentById(id);
         if(!Objects.equals(comment.getUsername(), user.getUsername())) {
             throw new SecurityException("작성자만 삭제/수정할 수 있습니다.");
@@ -40,8 +39,8 @@ public class CommentService {
         }
     }
 
-    public String deleteComment(Long sceduleId, Long id, User user) {
-        findScheduleById(sceduleId);
+    public String deleteComment(Long scheduleId, Long id, User user) {
+        findScheduleById(scheduleId);
         Comment comment = findCommentById(id);
         if(!Objects.equals(user.getUsername(), comment.getUsername())) {
             throw new SecurityException("작성자만 삭제/수정할 수 있습니다.");

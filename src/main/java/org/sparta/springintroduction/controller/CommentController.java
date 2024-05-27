@@ -34,12 +34,11 @@ public class CommentController {
     @Operation(summary = "댓글 작성")
     @Parameters({
             @Parameter(name = "contents", description = "내용(1~500자)", example = "내용입니다."),
-            @Parameter(name = "userId", description = "사용자 ID", example = "user1234")
     })
     public ResponseEntity<CommentResponseDto> createComment(@RequestParam Long schedule,
                                                             @Valid @RequestBody CommentRequestDto requestDto,
                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // scedule id는 쿼리 파람으로 받아온다.
+        // schedule id는 쿼리 파람으로 받아온다.
         return ResponseEntity.ok(commentService.createComment(schedule, requestDto, userDetails.getUser()));
     }
 
@@ -56,9 +55,6 @@ public class CommentController {
 
     @DeleteMapping("/comment")
     @Operation(summary = "댓글 삭제")
-    @Parameters({
-            @Parameter(name = "userId", description = "사용자 ID", example = "user1234")
-    })
     public ResponseEntity<String> deleteSchedule(@RequestParam Long schedule, @RequestParam Long id,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(commentService.deleteComment(schedule, id, userDetails.getUser()));
