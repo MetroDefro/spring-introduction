@@ -49,8 +49,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
         // 토큰 생성해서 헤더에 넣음.
-        String token = jwtUtil.createToken(username, role);
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        String accesstoken = jwtUtil.createToken(JwtUtil.ACCESS_TOKEN_HEADER, username, role, JwtUtil.ACCESS_TOKEN_TIME);
+        String refreshtoken = jwtUtil.createToken(JwtUtil.REFRESH_TOKEN_HEADER,username, role, JwtUtil.REFLESH_TOKEN_TIME);
+
+        response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accesstoken);
+        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshtoken);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();

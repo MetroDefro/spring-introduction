@@ -2,7 +2,6 @@ package org.sparta.springintroduction.service;
 
 import org.sparta.springintroduction.dto.CommentRequestDto;
 import org.sparta.springintroduction.dto.CommentResponseDto;
-import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.entity.Comment;
 import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.repository.CommentRepository;

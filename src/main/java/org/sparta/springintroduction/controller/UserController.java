@@ -1,10 +1,14 @@
 package org.sparta.springintroduction.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sparta.springintroduction.dto.SignupRequestDto;
 import org.sparta.springintroduction.dto.UserInfoDto;
 import org.sparta.springintroduction.entity.UserRoleEnum;
+import org.sparta.springintroduction.jwt.JwtUtil;
 import org.sparta.springintroduction.security.UserDetailsImpl;
 import org.sparta.springintroduction.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,6 +25,7 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/user/signup")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto requestDto) {
@@ -37,6 +42,33 @@ public class UserController {
         boolean isAdmin = (role == UserRoleEnum.ADMIN);
 
         return new UserInfoDto(username, isAdmin);
+    }
+
+    @PostMapping("/user/reissue")
+    public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+
+        //get refresh token
+        String refreshtoken = request.getHeader(JwtUtil.REFRESH_TOKEN_HEADER);
+
+        if (refreshtoken == null) {
+            return new ResponseEntity<>("refresh token이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        // 유효성 체크
+        try {
+            jwtUtil.validateToken(refreshtoken);
+        } catch (ExpiredJwtException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        String username = (String) jwtUtil.getUserInfoFromToken(refreshtoken).get("sub");
+        UserRoleEnum role = UserRoleEnum.valueOf((String) jwtUtil.getUserInfoFromToken(refreshtoken).get("auth"));
+
+        // 엑세스 톸큰 새로 만들어 헤더에 등록
+        String newAccess = jwtUtil.createToken(JwtUtil.ACCESS_TOKEN_HEADER, username, role, 600000L);
+        response.setHeader(JwtUtil.ACCESS_TOKEN_HEADER, newAccess);
+
+        return new ResponseEntity<>("refresh token 발급 성공", HttpStatus.OK);
     }
 
     @ExceptionHandler
