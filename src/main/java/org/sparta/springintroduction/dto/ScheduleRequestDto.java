@@ -21,18 +21,14 @@ public class ScheduleRequestDto {
 
     @NotNull
     @Email
-    private String charge;
+    private String charge;;
 
-    @NotNull
-    @Size(min = 1, max = 20)
-    private String password;
-
-    public Schedule toEntity() {
+    public Schedule toEntity(String username) {
         return Schedule.builder()
                 .title(title)
                 .contents(contents)
                 .charge(charge)
-                .password(password)
+                .username(username)
                 .build();
     }
 }

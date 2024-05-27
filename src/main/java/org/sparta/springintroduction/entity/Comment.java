@@ -26,8 +26,8 @@ public class Comment {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    @Column(name = "username", nullable = false, length = 20)
+    private String username;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id")

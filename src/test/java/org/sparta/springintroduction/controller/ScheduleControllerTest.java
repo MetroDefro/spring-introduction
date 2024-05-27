@@ -121,7 +121,7 @@ class ScheduleControllerTest {
         ScheduleResponseDto responseDto =
                 new ScheduleResponseDto(1L, "제목2", "내용2", "damdang2@email.com", LocalDateTime.now());
         String content = objectMapper.writeValueAsString(requestDto);
-        given(service.updateSchedule(any(Long.class), any(ScheduleRequestDto.class))).willReturn(responseDto);
+        given(service.updateSchedule(any(Long.class), any(ScheduleRequestDto.class), userDetails.getUser())).willReturn(responseDto);
 
         // when
         ResultActions actions = mockMvc.perform(put("/sprig-introduction/schedule")

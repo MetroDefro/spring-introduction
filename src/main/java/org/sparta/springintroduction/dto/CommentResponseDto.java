@@ -11,14 +11,12 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
     private Long id;
     private String contents;
-    private String userId;
     private Long scheduleId;
     private LocalDateTime createdAt;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
         this.contents = comment.getContents();
-        this.userId = comment.getUserId();
         this.scheduleId = comment.getSchedule().getId();
         this.createdAt = comment.getCreatedAt();
     }

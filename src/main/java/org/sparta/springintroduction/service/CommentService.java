@@ -4,6 +4,7 @@ import org.sparta.springintroduction.dto.CommentRequestDto;
 import org.sparta.springintroduction.dto.CommentResponseDto;
 import org.sparta.springintroduction.entity.Comment;
 import org.sparta.springintroduction.entity.Schedule;
+import org.sparta.springintroduction.entity.User;
 import org.sparta.springintroduction.repository.CommentRepository;
 import org.sparta.springintroduction.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -21,29 +22,29 @@ public class CommentService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public CommentResponseDto createComment(Long sceduleId, CommentRequestDto requestDto) {
+    public CommentResponseDto createComment(Long sceduleId, CommentRequestDto requestDto, User user) {
         // dto로부터 새 엔티티를 생성할 때 schedule 주입한다.
         Schedule schedule = findScheduleById(sceduleId);
-        Comment comment = requestDto.toEntity(findScheduleById(sceduleId));
+        Comment comment = requestDto.toEntity(findScheduleById(sceduleId), user.getUsername());
         Comment savedComment = commentRepository.save(comment);
         return new CommentResponseDto(savedComment);
     }
 
-    public CommentResponseDto updateComment(Long sceduleId, Long id, CommentRequestDto requestDto) {
+    public CommentResponseDto updateComment(Long sceduleId, Long id, CommentRequestDto requestDto, User user) {
         findScheduleById(sceduleId);
         Comment comment = findCommentById(id);
-        if(!Objects.equals(comment.getUserId(), requestDto.getUserId())) {
-            throw new SecurityException("작성자가 아니라 댓글 수정 권한이 없습니다.");
+        if(!Objects.equals(comment.getUsername(), user.getUsername())) {
+            throw new SecurityException("작성자만 삭제/수정할 수 있습니다.");
         } else {
             return new CommentResponseDto(comment.update(requestDto.getContents()));
         }
     }
 
-    public String deleteComment(Long sceduleId, Long id, String userId) {
+    public String deleteComment(Long sceduleId, Long id, User user) {
         findScheduleById(sceduleId);
         Comment comment = findCommentById(id);
-        if(!Objects.equals(userId, comment.getUserId())) {
-            throw new SecurityException("작성자가 아니라 댓글 수정 권한이 없습니다.");
+        if(!Objects.equals(user.getUsername(), comment.getUsername())) {
+            throw new SecurityException("작성자만 삭제/수정할 수 있습니다.");
         } else {
             commentRepository.delete(comment);
             return "댓글 삭제를 성공하였습니다.";

@@ -31,8 +31,8 @@ public class Schedule {
     @Column(name = "charge", nullable = false)
     private String charge;
 
-    @Column(name = "password", nullable = false, length = 20)
-    private String password;
+    @Column(name = "username", nullable = false, length = 20)
+    private String username;
 
     @CreatedDate
     @Column(updatable = false)

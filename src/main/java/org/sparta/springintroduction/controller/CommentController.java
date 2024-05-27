@@ -9,9 +9,11 @@ import org.sparta.springintroduction.dto.CommentRequestDto;
 import org.sparta.springintroduction.dto.CommentResponseDto;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
+import org.sparta.springintroduction.security.UserDetailsImpl;
 import org.sparta.springintroduction.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +36,11 @@ public class CommentController {
             @Parameter(name = "contents", description = "내용(1~500자)", example = "내용입니다."),
             @Parameter(name = "userId", description = "사용자 ID", example = "user1234")
     })
-    public ResponseEntity<CommentResponseDto> createComment(@RequestParam Long scedule, @Valid @RequestBody CommentRequestDto requestDto) {
+    public ResponseEntity<CommentResponseDto> createComment(@RequestParam Long schedule,
+                                                            @Valid @RequestBody CommentRequestDto requestDto,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // scedule id는 쿼리 파람으로 받아온다.
-        return ResponseEntity.ok(commentService.createComment(scedule, requestDto));
+        return ResponseEntity.ok(commentService.createComment(schedule, requestDto, userDetails.getUser()));
     }
 
     @PutMapping("/comment")
@@ -44,8 +48,10 @@ public class CommentController {
     @Parameters({
             @Parameter(name = "contents", description = "내용(1~500자)", example = "내용입니다.")
     })
-    public ResponseEntity<CommentResponseDto> updateComment(@RequestParam Long scedule, @RequestParam Long id, @Valid @RequestBody CommentRequestDto requestDto) {
-        return ResponseEntity.ok(commentService.updateComment(scedule, id, requestDto));
+    public ResponseEntity<CommentResponseDto> updateComment(@RequestParam Long schedule, @RequestParam Long id,
+                                                            @Valid @RequestBody CommentRequestDto requestDto,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(commentService.updateComment(schedule, id, requestDto, userDetails.getUser()));
     }
 
     @DeleteMapping("/comment")
@@ -53,8 +59,9 @@ public class CommentController {
     @Parameters({
             @Parameter(name = "userId", description = "사용자 ID", example = "user1234")
     })
-    public ResponseEntity<String> deleteSchedule(@RequestParam Long scedule, @RequestParam Long id, @RequestBody Map<String, String> userId) {
-        return ResponseEntity.ok(commentService.deleteComment(scedule, id, userId.get("userId")));
+    public ResponseEntity<String> deleteSchedule(@RequestParam Long schedule, @RequestParam Long id,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(commentService.deleteComment(schedule, id, userDetails.getUser()));
     }
 
     @ExceptionHandler

@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
+import org.sparta.springintroduction.security.UserDetailsImpl;
 import org.sparta.springintroduction.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +38,9 @@ public class ScheduleController {
             @Parameter(name = "charge", description = "담당자(email)", example = "damdang@email.com"),
             @Parameter(name = "password", description = "비밀번호(1~20자)", example = "1234"),
     })
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
-        return ResponseEntity.ok(scheduleService.createSchedule(requestDto));
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto,
+                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(scheduleService.createSchedule(requestDto, userDetails.getUser()));
     }
 
     @GetMapping("/schedule")
@@ -60,8 +63,9 @@ public class ScheduleController {
             @Parameter(name = "charge", description = "담당자(email)", example = "damdang@email.com"),
             @Parameter(name = "password", description = "비밀번호(1~20자)", example = "1234"),
     })
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(@RequestParam Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
-        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@RequestParam Long id, @Valid @RequestBody ScheduleRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto, userDetails.getUser()));
     }
 
     @DeleteMapping("/schedule")
@@ -69,8 +73,8 @@ public class ScheduleController {
     @Parameters({
             @Parameter(name = "password", description = "비밀번호(1~20자)", example = "1234"),
     })
-    public ResponseEntity<Long> deleteSchedule(@RequestParam Long id, @RequestBody Map<String, String> password) {
-        return ResponseEntity.ok(scheduleService.deleteSchedule(id, password.get("password")));
+    public ResponseEntity<Long> deleteSchedule(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id, userDetails.getUser()));
     }
 
     @ExceptionHandler

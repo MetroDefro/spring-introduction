@@ -11,7 +11,6 @@ import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.repository.ScheduleRepository;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -124,7 +123,7 @@ class ScheduleServiceTest {
                 .willReturn(Optional.of(schedule));
 
         // when
-        ScheduleResponseDto testResponseDto = service.updateSchedule(1L, requestDto);
+        ScheduleResponseDto testResponseDto = service.updateSchedule(1L, requestDto, userDetails.getUser());
 
         // then
         Assertions.assertEquals(responseDto.getId(), testResponseDto.getId());
@@ -181,7 +180,7 @@ class ScheduleServiceTest {
         // when
 
         // then
-        assertThrows(IllegalArgumentException.class, () ->  service.updateSchedule(schedule.getId(), requestDto));
+        assertThrows(IllegalArgumentException.class, () ->  service.updateSchedule(schedule.getId(), requestDto, userDetails.getUser()));
     }
     
     @DisplayName("일정 삭제 실패(비밀번호 틀림)")

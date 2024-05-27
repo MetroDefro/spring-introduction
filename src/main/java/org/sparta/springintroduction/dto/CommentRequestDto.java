@@ -15,13 +15,10 @@ public class CommentRequestDto {
     @Size(min = 1, max = 500)
     private String contents;
 
-    @NotNull
-    private String userId;
-
-    public Comment toEntity(Schedule schedule) {
+    public Comment toEntity(Schedule schedule, String username) {
         return Comment.builder()
                 .contents(contents)
-                .userId(userId)
+                .username(username)
                 .schedule(schedule)
                 .build();
     }
