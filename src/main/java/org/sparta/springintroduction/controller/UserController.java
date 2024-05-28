@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sparta.springintroduction.dto.SignupRequestDto;
 import org.sparta.springintroduction.dto.UserInfoDto;
 import org.sparta.springintroduction.entity.UserRoleEnum;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sprig-introduction")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -73,11 +75,13 @@ public class UserController {
 
     @ExceptionHandler
     private ResponseEntity<String> handleException(IllegalArgumentException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     private ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(Objects.requireNonNull(e.getFieldError()).getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
 }

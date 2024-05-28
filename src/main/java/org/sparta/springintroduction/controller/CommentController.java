@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.sparta.springintroduction.dto.CommentRequestDto;
 import org.sparta.springintroduction.dto.CommentResponseDto;
 import org.sparta.springintroduction.security.UserDetailsImpl;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/sprig-introduction")
 @Tag(name = "Comment", description = "댓글 API")
+@Slf4j
 public class CommentController {
     private final CommentService commentService;
 
@@ -59,11 +61,13 @@ public class CommentController {
 
     @ExceptionHandler
     private ResponseEntity<String> handleException(IllegalArgumentException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     private ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(Objects.requireNonNull(e.getFieldError()).getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
 }

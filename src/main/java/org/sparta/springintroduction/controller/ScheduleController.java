@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.security.UserDetailsImpl;
@@ -25,6 +26,7 @@ import java.util.Objects;
 @RequestMapping("/sprig-introduction")
 @Tag(name = "Schedule Management ", description = "일정 관리 페이지 API")
 @RequiredArgsConstructor
+@Slf4j
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -76,11 +78,13 @@ public class ScheduleController {
 
     @ExceptionHandler
     private ResponseEntity<String> handleException(IllegalArgumentException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     private ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(Objects.requireNonNull(e.getFieldError()).getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
 }
