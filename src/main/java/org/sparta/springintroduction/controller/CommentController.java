@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.sparta.springintroduction.dto.CommentRequestDto;
 import org.sparta.springintroduction.dto.CommentResponseDto;
-import org.sparta.springintroduction.dto.ScheduleRequestDto;
-import org.sparta.springintroduction.dto.ScheduleResponseDto;
 import org.sparta.springintroduction.security.UserDetailsImpl;
 import org.sparta.springintroduction.service.CommentService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Objects;
 
 @RestController

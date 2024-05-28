@@ -13,40 +13,38 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Entity
-@Table(name = "schedule")
+@Table(name = "file")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Schedule {
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 20)
-    private String title;
+    @Column(nullable = false)
+    private String name;
 
-    @Column(name = "contents", nullable = false, length = 500)
-    private String contents;
+    @Column(nullable = false)
+    private String type;
 
-    @Column(name = "charge", nullable = false)
-    private String charge;
-
-    @Column(name = "username", nullable = false, length = 20)
-    private String username;
+    @Column(nullable = false)
+    private int size;
 
     @CreatedDate
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    @OneToOne
-    @JoinColumn(name = "file_id")
-    private File file;
+    @Lob()
+    @Column(nullable = false, length = 5000000)
+    private byte[] contents;
 
-    public Schedule update(String title, String contents, String charge) {
-        this.title = title;
+    public File update(String name, String type, int size, byte[] contents) {
+        this.name = name;
+        this.type = type;
+        this.size = size;
         this.contents = contents;
-        this.charge = charge;
         return this;
     }
 }

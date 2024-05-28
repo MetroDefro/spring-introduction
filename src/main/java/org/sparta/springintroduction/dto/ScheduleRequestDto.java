@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.sparta.springintroduction.entity.File;
 import org.sparta.springintroduction.entity.Schedule;
 
 @Getter
@@ -23,12 +24,13 @@ public class ScheduleRequestDto {
     @Email
     private String charge;;
 
-    public Schedule toEntity(String username) {
+    public Schedule toEntity(String username, File file) {
         return Schedule.builder()
                 .title(title)
                 .contents(contents)
                 .charge(charge)
                 .username(username)
+                .file(file)
                 .build();
     }
 }

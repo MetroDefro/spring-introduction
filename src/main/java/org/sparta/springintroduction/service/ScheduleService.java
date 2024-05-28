@@ -1,27 +1,32 @@
 package org.sparta.springintroduction.service;
 
+import lombok.RequiredArgsConstructor;
 import org.sparta.springintroduction.dto.ScheduleRequestDto;
 import org.sparta.springintroduction.dto.ScheduleResponseDto;
+import org.sparta.springintroduction.entity.File;
 import org.sparta.springintroduction.entity.Schedule;
 import org.sparta.springintroduction.entity.User;
 import org.sparta.springintroduction.repository.ScheduleRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final FileService fileService;
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
-
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user) {
-        Schedule schedule = requestDto.toEntity(user.getUsername());
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, MultipartFile multiFile, User user) {
+        File file = null;
+        if(multiFile != null && !multiFile.isEmpty()) {
+            file = fileService.createFile(multiFile);
+        }
+        Schedule schedule = requestDto.toEntity(user.getUsername(), file);
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new ScheduleResponseDto(savedSchedule);
     }
@@ -36,9 +41,12 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user) {
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, MultipartFile file, User user) {
         Schedule schedule = findScheduleById(id);
         if(checkUsername(schedule, user.getUsername())) {
+            if(file != null && !file.isEmpty()) {
+                fileService.updateFile(schedule.getFile().getId(), file);
+            }
             return new ScheduleResponseDto(schedule
                     .update(requestDto.getTitle(), requestDto.getContents(), user.getUsername()));
         } else {
@@ -49,6 +57,7 @@ public class ScheduleService {
     public Long deleteSchedule(Long id, User user) {
         Schedule schedule = findScheduleById(id);
         if(checkUsername(schedule, user.getUsername())) {
+            fileService.deleteFile(schedule.getFile().getId());
             scheduleRepository.delete(schedule);
             return id;
         } else {
