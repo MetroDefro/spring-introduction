@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,6 +26,7 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationEntryPoint authEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,6 +63,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/sprig-introduction/user/**").permitAll() // '/sprig-introduction/user/'로 시작하는 요청 모두 접근 허가
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
+
+        http.exceptionHandling((exception) -> exception.authenticationEntryPoint(authEntryPoint));
 
         // SecurityFilterChain에 필터를 넣고 순서 지정 한다.
         // 로그인(인증) 전에 인가를 한다.

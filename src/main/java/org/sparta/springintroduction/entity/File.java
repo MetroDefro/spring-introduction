@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -39,6 +41,9 @@ public class File {
     @Lob()
     @Column(nullable = false, length = 5000000)
     private byte[] contents;
+
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "file")
+    private Schedule schedule;
 
     public File update(String name, String type, int size, byte[] contents) {
         this.name = name;

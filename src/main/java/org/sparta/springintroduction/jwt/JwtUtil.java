@@ -71,15 +71,15 @@ public class JwtUtil {
     // 토큰 검증
     public void validateToken(String token) {
         try {
+            if(!StringUtils.hasText(token)) {
+                throw new JwtException("토큰이 유효하지 않습니다.");
+            }
             token = token.replace(BEARER_PREFIX, "");
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             // 토큰이 필요한 API 요청에서 토큰을 전달하지 않았거나 정상 토큰이 아닐 때
         } catch (SecurityException | MalformedJwtException | SignatureException | UnsupportedJwtException |
-                 IllegalArgumentException e) {
+                 IllegalArgumentException | ExpiredJwtException e) {
             throw new JwtException("토큰이 유효하지 않습니다.");
-            // 토큰 만료
-        } catch (ExpiredJwtException e) {
-            throw new JwtException("만료된 JWT token 입니다.");
         }
     }
 

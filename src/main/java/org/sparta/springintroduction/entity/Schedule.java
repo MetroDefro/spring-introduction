@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -39,9 +41,12 @@ public class Schedule {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "file_id")
     private File file;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "schedule")
+    private List<Comment> comments = new ArrayList<>();
 
     public Schedule update(String title, String contents, String charge) {
         this.title = title;

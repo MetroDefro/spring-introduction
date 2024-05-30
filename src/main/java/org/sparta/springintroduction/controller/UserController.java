@@ -80,7 +80,7 @@ public class UserController {
         String newAccess = jwtUtil.createToken(JwtUtil.ACCESS_TOKEN_HEADER, username, role, 600000L);
         response.setHeader(JwtUtil.ACCESS_TOKEN_HEADER, newAccess);
 
-        return new ResponseEntity<>("refresh token 발급 성공", HttpStatus.OK);
+        return new ResponseEntity<>("access token 발급 성공", HttpStatus.OK);
     }
 
     @ExceptionHandler

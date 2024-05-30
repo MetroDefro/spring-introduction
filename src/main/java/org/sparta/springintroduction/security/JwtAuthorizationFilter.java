@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.sparta.springintroduction.jwt.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -31,23 +33,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         String tokenValue = jwtUtil.getJwtFromHeader(req);
 
-        if (StringUtils.hasText(tokenValue)) {
-            // 토큰 검증.
-            try {
-                jwtUtil.validateToken(tokenValue);
-                Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-                setAuthentication(info.getSubject());
-                filterChain.doFilter(req, res);
-            } catch (Exception e) {
-                res.setStatus(400);
-                res.setCharacterEncoding("UTF-8");
-                res.getWriter().write(e.getMessage());
-            }
-        } else {
-            res.setStatus(400);
-            res.setCharacterEncoding("UTF-8");
-            res.getWriter().write("토큰이 유효하지 않습니다.");
+        // 토큰 검증.
+        try {
+            jwtUtil.validateToken(tokenValue);
+            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
+            setAuthentication(info.getSubject());
+
+        } catch (JwtException e) {
+            log.error(e.getMessage());
         }
+
+        filterChain.doFilter(req, res);
     }
 
     // 인증 처리
