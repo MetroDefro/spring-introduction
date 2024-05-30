@@ -35,19 +35,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // 토큰 검증.
             try {
                 jwtUtil.validateToken(tokenValue);
-            } catch (JwtException e) {
-                throw new ServletException(e.getMessage());
-            }
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-
-            try {
+                Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
                 setAuthentication(info.getSubject());
+                filterChain.doFilter(req, res);
             } catch (Exception e) {
-                throw new ServletException(e.getMessage());
+                res.setStatus(400);
+                res.setCharacterEncoding("UTF-8");
+                res.getWriter().write(e.getMessage());
             }
+        } else {
+            res.setStatus(400);
+            res.setCharacterEncoding("UTF-8");
+            res.getWriter().write("토큰이 유효하지 않습니다.");
         }
-
-        filterChain.doFilter(req, res);
     }
 
     // 인증 처리
