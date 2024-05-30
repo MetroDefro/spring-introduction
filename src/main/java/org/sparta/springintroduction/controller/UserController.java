@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sparta.springintroduction.dto.LoginRequestDto;
 import org.sparta.springintroduction.dto.SignupRequestDto;
 import org.sparta.springintroduction.dto.UserInfoDto;
 import org.sparta.springintroduction.entity.UserRoleEnum;
 import org.sparta.springintroduction.jwt.JwtUtil;
 import org.sparta.springintroduction.security.UserDetailsImpl;
 import org.sparta.springintroduction.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +35,14 @@ public class UserController {
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
         return ResponseEntity.ok("회원 가입에 성공하였습니다.");
+    }
+
+    @PostMapping("/user/login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto requestDto) {
+        HttpHeaders headers = userService.login(requestDto);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body("로그인에 성공하였습니다.");
     }
 
     // 회원 관련 정보 받기

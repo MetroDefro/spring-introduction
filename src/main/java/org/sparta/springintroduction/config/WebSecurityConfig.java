@@ -2,7 +2,6 @@ package org.sparta.springintroduction.config;
 
 import lombok.RequiredArgsConstructor;
 import org.sparta.springintroduction.jwt.JwtUtil;
-import org.sparta.springintroduction.security.JwtAuthenticationFilter;
 import org.sparta.springintroduction.security.JwtAuthorizationFilter;
 import org.sparta.springintroduction.security.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -26,7 +25,6 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,14 +35,6 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    // JwtAuthenticationFilter 생성해서 Bean 등록
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
-        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-        return filter;
     }
 
     // JwtAuthorizationFilter 생성해서 Bean 등록
@@ -72,17 +62,9 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
-        http.formLogin((formLogin) ->
-                formLogin
-                        .loginPage("/sprig-introduction/user/login")
-                        .failureUrl("/sprig-introduction/user/login?error=true") // 로그인 실패 후 이동 페이지
-                        .permitAll()
-        );
-
         // SecurityFilterChain에 필터를 넣고 순서 지정 한다.
         // 로그인(인증) 전에 인가를 한다.
-        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
