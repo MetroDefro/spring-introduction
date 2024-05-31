@@ -26,10 +26,11 @@ public class Comment {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
-    @Column(name = "username", nullable = false, length = 20)
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username")
+    private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 

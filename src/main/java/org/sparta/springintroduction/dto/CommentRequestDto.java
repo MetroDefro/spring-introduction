@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.springintroduction.entity.Comment;
 import org.sparta.springintroduction.entity.Schedule;
+import org.sparta.springintroduction.entity.User;
 
 @Getter
 @AllArgsConstructor
@@ -17,10 +18,10 @@ public class CommentRequestDto {
     @Size(min = 1, max = 500, message = "내용은 최소 1자 이상, 500자 이하여야 합니다.")
     private String contents;
 
-    public Comment toEntity(Schedule schedule, String username) {
+    public Comment toEntity(Schedule schedule, User user) {
         return Comment.builder()
                 .contents(contents)
-                .username(username)
+                .user(user)
                 .schedule(schedule)
                 .build();
     }

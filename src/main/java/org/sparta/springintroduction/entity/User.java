@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -40,4 +42,10 @@ public class User {
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
+    private List<Schedule> schedule = new ArrayList<>();
 }

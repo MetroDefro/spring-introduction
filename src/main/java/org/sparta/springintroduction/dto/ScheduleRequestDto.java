@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.sparta.springintroduction.entity.File;
 import org.sparta.springintroduction.entity.Schedule;
+import org.sparta.springintroduction.entity.User;
 
 @Getter
 @AllArgsConstructor
@@ -24,12 +25,12 @@ public class ScheduleRequestDto {
     @Email(message = "이메일 형식에 맞추어야 합니다.")
     private String charge;;
 
-    public Schedule toEntity(String username, File file) {
+    public Schedule toEntity(User user, File file) {
         return Schedule.builder()
                 .title(title)
                 .contents(contents)
                 .charge(charge)
-                .username(username)
+                .user(user)
                 .file(file)
                 .build();
     }

@@ -24,7 +24,7 @@ public class CommentService {
 
     public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, User user) {
         // dto로부터 새 엔티티를 생성할 때 schedule 주입한다.
-        Comment comment = requestDto.toEntity(findScheduleById(scheduleId), user.getUsername());
+        Comment comment = requestDto.toEntity(findScheduleById(scheduleId), user);
         Comment savedComment = commentRepository.save(comment);
         return new CommentResponseDto(savedComment);
     }
@@ -32,7 +32,7 @@ public class CommentService {
     public CommentResponseDto updateComment(Long scheduleId, Long id, CommentRequestDto requestDto, User user) {
         findScheduleById(scheduleId);
         Comment comment = findCommentById(id);
-        if(!Objects.equals(comment.getUsername(), user.getUsername())) {
+        if(!Objects.equals(comment.getUser(), user)) {
             throw new SecurityException("작성자만 삭제/수정할 수 있습니다.");
         } else {
             return new CommentResponseDto(comment.update(requestDto.getContents()));
@@ -42,7 +42,7 @@ public class CommentService {
     public String deleteComment(Long scheduleId, Long id, User user) {
         findScheduleById(scheduleId);
         Comment comment = findCommentById(id);
-        if(!Objects.equals(user.getUsername(), comment.getUsername())) {
+        if(!Objects.equals(user, comment.getUser())) {
             throw new SecurityException("작성자만 삭제/수정할 수 있습니다.");
         } else {
             commentRepository.delete(comment);

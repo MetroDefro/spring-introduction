@@ -33,8 +33,9 @@ public class Schedule {
     @Column(name = "charge", nullable = false)
     private String charge;
 
-    @Column(name = "username", nullable = false, length = 20)
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreatedDate
     @Column(updatable = false)

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class ScheduleService {
         if(multiFile != null && !multiFile.isEmpty()) {
             file = fileService.createFile(multiFile);
         }
-        Schedule schedule = requestDto.toEntity(user.getUsername(), file);
+        Schedule schedule = requestDto.toEntity(user, file);
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new ScheduleResponseDto(savedSchedule);
     }
@@ -43,7 +44,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, MultipartFile file, User user) {
         Schedule schedule = findScheduleById(id);
-        if(checkUsername(schedule, user.getUsername())) {
+        if(Objects.equals(schedule.getUser(), user)) {
             if(file != null && !file.isEmpty()) {
                 fileService.updateFile(schedule.getFile().getId(), file);
             }
@@ -56,7 +57,7 @@ public class ScheduleService {
 
     public Long deleteSchedule(Long id, User user) {
         Schedule schedule = findScheduleById(id);
-        if(checkUsername(schedule, user.getUsername())) {
+        if(Objects.equals(schedule.getUser(), user)) {
             fileService.deleteFile(schedule.getFile().getId());
             scheduleRepository.delete(schedule);
             return id;
@@ -68,9 +69,5 @@ public class ScheduleService {
     private Schedule findScheduleById(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일정을 찾을 수 없습니다."));
-    }
-
-    private boolean checkUsername(Schedule schedule, String username) {
-        return schedule.getUsername().equals(username);
     }
 }
