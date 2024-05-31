@@ -12,16 +12,16 @@ import org.sparta.springintroduction.entity.Schedule;
 @AllArgsConstructor
 public class ScheduleRequestDto {
 
-    @NotBlank
-    @Size(min = 1, max = 200)
+    @NotBlank(message = "제목은 공백일 수 없습니다.")
+    @Size(min = 1, max = 200, message = "제목은 최소 1자 이상, 200자 이하여야 합니다.")
     private String title;
 
-    @NotBlank
-    @Size(min = 1, max = 500)
+    @NotBlank(message = "내용은 공백일 수 없습니다.")
+    @Size(min = 1, max = 500, message = "내용은 최소 1자 이상, 500자 이하여야 합니다.")
     private String contents;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "email은 공백일 수 없습니다.")
+    @Email(message = "이메일 형식에 맞추어야 합니다.")
     private String charge;;
 
     public Schedule toEntity(String username, File file) {

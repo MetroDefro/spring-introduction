@@ -13,8 +13,8 @@ import org.sparta.springintroduction.entity.Schedule;
 @NoArgsConstructor
 public class CommentRequestDto {
 
-    @NotBlank
-    @Size(min = 1, max = 500)
+    @NotBlank(message = "내용은 공백일 수 없습니다.")
+    @Size(min = 1, max = 500, message = "내용은 최소 1자 이상, 500자 이하여야 합니다.")
     private String contents;
 
     public Comment toEntity(Schedule schedule, String username) {
